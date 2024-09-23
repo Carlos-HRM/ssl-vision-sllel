@@ -65,4 +65,24 @@ namespace FieldConstantsRoboCup2018B {
     const int kNumCamerasLocal = 1;
 }
 
+namespace FieldConstantsSSLEL {
+    const double kFieldLength = 4500.0;
+    const double kFieldWidth = 3000.0;
+    const double kGoalWidth = 800.0;
+    const double kGoalDepth = 180.0;
+    const double kGoalHeight = 155.0;
+    const double kBoundaryWidth = 500.0;
+    const double kLineThickness = 10.0;
+    const double kPenaltyAreaDepth = 500.0;
+    const double kPenaltyAreaWidth = 1350.0;
+    const double kCenterCircleRadius = 500.0;
+    const double kGoalLineToPenaltyMark = 3000.0;
+    const double kBallRadius = 21.0;
+    const double kMaxRobotRadius = 90.0;
+    const int kNumCamerasTotal = 1;
+    const int kNumCamerasLocal = 1;
+    const int kNumLines = 12;
+    const int kNumArcs = 1;
+}
+
 #endif // FIELD_DEFAULT_CONSTANTS_H

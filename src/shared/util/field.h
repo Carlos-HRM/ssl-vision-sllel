@@ -167,6 +167,8 @@ protected:
   VarTrigger* updateShapes;
   VarTrigger* applyDivisionA;
   VarTrigger* applyDivisionB;
+  VarTrigger* applyDivisionC;
+
 public:
   VarList* getSettings() const {
     return settings;
@@ -222,6 +224,8 @@ protected slots:
   void updateFieldLinesAndArcs();
   void applyGeometryDivisionA();
   void applyGeometryDivisionB();
+  void applyGeometryDivisionC();
+
 };
 
 
