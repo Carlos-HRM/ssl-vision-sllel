@@ -136,6 +136,17 @@ MainWindow::MainWindow(bool start_capture, bool enforce_affinity, int num_camera
   resize(size);
   move(pos);
 
+  // Set policies for splitter and cam_tabs for better responsiveness
+  splitter->setStretchFactor(0, 1); // Prioritize left panel for expansion
+  splitter->setStretchFactor(1, 3); // Prioritize right panel (camera tabs) for expansion
+  cam_tabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+  // Set minimum sizes for tabs and widgets
+  left_tab = new QTabWidget();
+  left_tab->setMinimumSize(200, 400); // Minimum size for left tab
+  cam_tabs->setMinimumSize(300, 400); // Minimum size for camera tabs
+  splitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
   //FINISHED STRUCTURAL TREE
   //NOW LOAD DATA:
 
@@ -159,14 +170,12 @@ MainWindow::MainWindow(bool start_capture, bool enforce_affinity, int num_camera
   tree_view->expandAndFocus(stackvar);
   tree_view->fitColumns();
 
-  left_tab=new QTabWidget();
   left_tab->setTabPosition(QTabWidget::West);
+  left_tab->addTab(tree_view,"Data-Tree");
 
   splitter->addWidget(left_tab);
   splitter->addWidget(cam_tabs);
   if (right_tab!=0) splitter->addWidget(right_tab);
-
-  left_tab->addTab(tree_view,"Data-Tree");
 
   setCentralWidget(splitter); //was splitter
 
@@ -176,6 +185,14 @@ MainWindow::MainWindow(bool start_capture, bool enforce_affinity, int num_camera
   // by a mutex when the signal is triggered
   connect(save_settings_trigger, SIGNAL(signalTriggered()),
           this, SLOT(slotSaveSettings()), Qt::QueuedConnection);
+}
+
+// Handle window resizing for dynamic adjustments
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    // Dynamically adjust the splitter sizes based on the new window size
+    QSize newSize = event->size();
+    splitter->setSizes({newSize.width() * 0.3, newSize.width() * 0.7});
+    QMainWindow::resizeEvent(event);  // Call the default behavior
 }
 
 void MainWindow::timerEvent( QTimerEvent * e) {
@@ -216,6 +233,7 @@ void MainWindow::closeEvent(QCloseEvent * event ) {
     window_settings.beginGroup("MainWindow");
     window_settings.setValue("pos", pos());
     window_settings.setValue("size", size());
+    window_settings.setValue("splitterState", splitter->saveState()); // Save splitter state
     window_settings.endGroup();
   }
 }
@@ -225,8 +243,9 @@ MainWindow::~MainWindow() {
   //FIXME: right now we don't clean up anything
   VarXML::write(world,"settings.xml");
 
-  // Stop stack:
+   // Stop stack:
   multi_stack->stop();
   delete multi_stack;
   exit(0);
 }
+

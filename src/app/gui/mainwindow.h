@@ -72,12 +72,14 @@ public:
   virtual ~MainWindow();
   void init();
   void Quit() { emit close(); }
-  virtual void closeEvent(QCloseEvent * event );
+  virtual void closeEvent(QCloseEvent * event);
   virtual void timerEvent(QTimerEvent * e);
+  
+  // Adicione a declaração do resizeEvent
+  virtual void resizeEvent(QResizeEvent *event) override;  // Adicionando aqui
 
 public slots:
   void slotSaveSettings();
 };
 
-
-#endif
+#endif // MAINWINDOW_H
